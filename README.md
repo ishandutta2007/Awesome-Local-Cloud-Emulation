@@ -42,17 +42,11 @@ Contributions welcome! Open a PR to add/update entries. Keep descriptions factua
 
 ## SaaS/Hosted Platforms
 
+| Product | Description | Pricing | Free Tier Limits |
+| :--- | :--- | :--- | :--- |
+| **[LocalStack](https://localstack.cloud/)** | Emulates AWS locally in Docker. Features base AWS emulation, Cloud Pods state sharing, ephemeral sandboxes, and Azure in private preview. Commercial use on the free Hobby tier is prohibited; requires an account & auth token. | Starts at $39/dev/month (Base plan); $89/dev/month (Ultimate plan) | **Hobby Plan**: $0 forever (Strictly non-commercial use only, community tier service limits, requires auth token).<br>**Free Trial**: 30-day free trial of Ultimate tier (no credit card required). |
 
-
-- **[LocalStack](https://localstack.cloud/)**  
-
-  **The former de facto standard, now proprietary.** Provides a fully functional local AWS cloud stack as a Docker container. **Critical change**: Since March 2026, the Community Edition requires authentication (account + auth token), and **commercial use on the free Hobby plan is prohibited** . Paid plans unlock commercial use. The vendor also offers LocalStack for Azure in private preview . Best for teams already invested in LocalStack's ecosystem who can justify the licensing cost, or non-commercial hobby use.
-
-
-
-- **No other dedicated SaaS platforms exist for local cloud emulation.** The value of these tools is local execution—cloud providers themselves do not offer hosted "local emulation" services. The paid tiers that exist (LocalStack) are commercial licenses for the same local software.
-
-
+*Note: No other dedicated SaaS platforms exist for local cloud emulation. The value of these tools is local execution—cloud providers themselves do not offer hosted "local emulation" services. The paid tiers that exist (LocalStack) are commercial licenses for the same local software.*
 
 ## Open-Source GitHub Projects
 
