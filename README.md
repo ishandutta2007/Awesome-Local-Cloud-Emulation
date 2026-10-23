@@ -72,7 +72,7 @@ Market dynamics have historically exhibited a **winner-take-most concentration**
 
 ## 🚀 Open-Source GitHub Projects
 
-All open-source tools below are actively maintained and sorted in descending order of GitHub community stars within their respective categories.
+All open-source tools below are actively maintained and sorted in descending order of GitHub community GitHub_Stars within their respective categories.
 
 ### ☁️ AWS Emulators
 
@@ -163,7 +163,7 @@ Contributions, bug reports, and updates are warmly welcomed! 🌟
 
 1. 🍴 Fork the repository.
 2. 🌿 Create a new feature branch (`git checkout -b feature/add-new-emulator`).
-3. 📝 Add or update tools following the existing format with stars badge, factual descriptions, and official links.
+3. 📝 Add or update tools following the existing format with Stars_Badge, factual descriptions, and official links.
 4. 🚀 Commit your changes (`git commit -m 'Add new cloud emulator tool'`).
 5. 📬 Push to the branch and open a Pull Request.
 
