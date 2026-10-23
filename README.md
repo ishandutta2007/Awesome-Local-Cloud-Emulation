@@ -1,189 +1,186 @@
-# Awesome-Local-Cloud-Emulation
+# ☁️ Awesome Local Cloud Emulation
 
-## Top Local Cloud Emulation Ecosystem
+<div align="center">
 
+<a href="https://github.com/ishandutta2007/Awesome-Awesome-Awesome"><img src="https://img.shields.io/badge/Awesome-%E2%9C%94-blueviolet?style=flat-square&logo=github" alt="Awesome"/></a><a href="https://discord.gg/jc4xtF58Ve"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ishandutta2007/Awesome-Local-Cloud-Emulation/pulls)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/ishandutta2007/Awesome-Local-Cloud-Emulation/graphs/commit-activity)
+<a href="https://github.com/ishandutta2007"><img alt="GitHub followers" src="https://img.shields.io/github/followers/ishandutta2007?label=Follow" /></a>
 
+<br/><br/>
 
-**Curated List of SaaS Products & Open-Source GitHub Projects**  
+<a href="https://github.com/ishandutta2007/Awesome-Local-Cloud-Emulation">
+  <img src="assets/banner.svg" alt="Awesome Local Cloud Emulation Banner - Curated Ecosystem for Offline Cloud Testing" width="100%" />
+</a>
 
-*Focused on Local AWS/Azure/GCP Emulation, Offline Development & Self-Hosted Cloud Sandboxes*  
+<br/>
+
+**A curated directory of top open-source projects, offline cloud sandboxes, and developer tools for local AWS, Azure, and Google Cloud (GCP) emulation.**
+
+*Run cloud-native stacks offline, slash CI/CD bills, mock cloud APIs, and build resilient architectures locally.*
 
 **Last updated: October 2026**
 
-
-
-This repository tracks notable **SaaS platforms** and **open-source projects** for **Local Cloud Emulation**. These tools simulate cloud provider APIs on your local machine—letting you develop, test, and iterate against AWS, Azure, or GCP services without real cloud accounts, network calls, or bills. They are essential for CI pipelines, offline development, and testing infrastructure-as-code before deployment.
-
-
-
-**Examples** include LocalStack, Moto, floci, MiniStack, Azurite, and cloudemu (the category leaders).
-
-
-
-**Open-source emphasis**: This section is heavily expanded with every major active project for self-hosting, avoiding paid emulation tiers, and retaining full control over your local cloud environment. The landscape shifted dramatically in **March 2026** when LocalStack's Community Edition went proprietary—requiring an account and auth token, with commercial use restricted on the free tier . This triggered a wave of open-source alternatives. The current open-source landscape is anchored by **Moto** (the mature Python AWS mock), **floci** (the MIT-licensed LocalStack drop-in replacement), **MiniStack** (the multi-account AWS emulator), and **fakecloud** (the depth-first Rust emulator), with **Azurite** serving Azure storage and **cloudemu** providing multi-cloud in-memory emulation.
-
-
-
-Contributions welcome! Open a PR to add/update entries. Keep descriptions factual and link to official sites.
-
-
-
-## Table of Contents
-
-- [SaaS/Hosted Platforms](#saas-hosted-platforms)
-
-- [Open-Source GitHub Projects](#open-source-github-projects)
-
-- [How to Contribute](#how-to-contribute)
-
-- [Disclaimer](#disclaimer)
-
-
-
-## SaaS/Hosted Platforms
-
-| Product | Description | Pricing | Free Tier Limits |
-| :--- | :--- | :--- | :--- |
-| **[LocalStack](https://localstack.cloud/)** | Emulates AWS locally in Docker. Features base AWS emulation, Cloud Pods state sharing, ephemeral sandboxes, and Azure in private preview. Commercial use on the free Hobby tier is prohibited; requires an account & auth token. | Starts at $39/dev/month (Base plan); $89/dev/month (Ultimate plan) | **Hobby Plan**: $0 forever (Strictly non-commercial use only, community tier service limits, requires auth token).<br>**Free Trial**: 30-day free trial of Ultimate tier (no credit card required). |
-
-*Note: No other dedicated SaaS platforms exist for local cloud emulation. The value of these tools is local execution—cloud providers themselves do not offer hosted "local emulation" services. The paid tiers that exist (LocalStack) are commercial licenses for the same local software.*
-
-## Open-Source GitHub Projects
-
-
-
-### AWS Emulation
-
-
-
-- **[Moto](https://github.com/getmoto/moto)**  
-
-  **The mature Python AWS mock.** The longest-standing open-source AWS emulator, designed as a library that patches botocore in-process, with a standalone server mode for other SDKs and languages . **Two modes**: in-process (fastest, no external process, Python-only) and standalone server (speaks wire protocol, any language). **Strengths**: enormous service coverage built over years, deeply integrated into Python testing culture, and zero infrastructure for Python tests. **Limitations**: in-process mode cannot run real Lambda code, real databases, or real Redis—it mocks API shapes, not execution . Best for Python test suites that need fast, dependency-free AWS mocks.
-
-
-
-- **[floci](https://github.com/floci-io/floci)**  
-
-  **The MIT-licensed LocalStack drop-in replacement.** A single static binary speaking the AWS wire protocol on port 4566. **No account, no auth token, no paid tier** . **Migration path**: automatically translates LocalStack's environment variables, runs unmodified init scripts from `/etc/localstack/init/`, and responds on `/_localstack/health`—CI pipelines waiting for that signal won't notice the difference . **Depth-first architecture**: uses real containers when accuracy demands it—Lambda runs inside AWS's official execution image, RDS spins up actual PostgreSQL/MySQL/MariaDB, ElastiCache runs real Valkey . **Multi-account isolation**: a 12-digit `AWS_ACCESS_KEY_ID` becomes the account ID . **Caveat**: mimics AWS behavior, not AWS security—IAM policies are not enforced by default (enable via `FLOCI_SERVICES_IAM_ENFORCEMENT_ENABLED`) . Best for teams migrating from LocalStack who want a free, actively maintained alternative with real backend execution.
-
-
-
-- **[MiniStack](https://github.com/ministackorg/ministack)**  
-
-  **The multi-tenant AWS emulator.** Surfaced during the March 2026 LocalStack paywall window . **Multi-tenancy**: a 12-digit `AWS_ACCESS_KEY_ID` becomes the account ID, with full resource isolation per account—multiple developers or CI pipelines can share one endpoint without collisions . **Multi-region**: state is isolated per region since 1.4.0 . **Compatibility**: responds on LocalStack's health endpoints (`/_localstack/health`), easing migration . **Features**: reset endpoint for clean CI state, init scripts, and configurable Lambda execution (local or Docker) . Best for teams that want multi-account isolation without configuring separate emulator instances.
-
-
-
-- **[fakecloud](https://github.com/faiscadev/fakecloud)**  
-
-  **The depth-first Rust emulator.** Single ~19 MB static binary, AGPL-3.0 licensed. **Philosophy**: 100% behavioral conformance for each service before adding the next—validated against 54,000+ Smithy test variants and Terraform provider acceptance tests . **Coverage**: 23 services, 1,680 operations including S3, SQS, SNS, DynamoDB, Lambda, IAM, STS, KMS, Secrets Manager, CloudFormation, EventBridge, RDS, ElastiCache, Step Functions, and Bedrock . **Real execution**: Lambda runs in Docker across 13 runtimes, RDS runs real PostgreSQL/MySQL/MariaDB, ElastiCache runs real Redis/Valkey . **Cross-service wiring**: EventBridge → Step Functions, S3 → Lambda, and 15+ more integrations actually fire . Best for teams that need high-fidelity cross-service behavior for complex integration tests.
-
-
-
-### Azure Emulation
-
-
-
-- **[Azurite](https://github.com/Azure/Azurite)**  
-
-  **Microsoft's official Azure Storage emulator.** Open-source (JavaScript/Node.js), cross-platform (Windows, Linux, macOS). Supports **Blob, Queue, and Table** services—but not Azure Files or Data Lake Storage Gen2 . **IP-style URLs**: `http://127.0.0.1:10000/devstoreaccount1/container/blob` (account name is in the path, not hostname) . **Production-style URLs** available via hosts file modification . Best for Azure developers testing storage operations locally without a cloud account.
-
-
-
-- **[azlocal](https://github.com/DanielTangnes/azlocal)**  
-
-  **The unified Azure emulator suite.** Orchestrates Azurite, Cosmos DB Linux emulator, Service Bus emulator, and built-in mocks for Key Vault and Event Grid behind a single CLI, declarative YAML config, and web dashboard . **Status**: early development, but orchestration, declarative provisioning/seeding, Key Vault/Event Grid mocks, and CI health reports work . **Quick start**: `azlocal init` → `azlocal up -d` → `azlocal ui` (dashboard at port 8900) . Best for Azure teams that want a single command to start a consistent local environment across multiple services.
-
-
-
-- **[Topaz](https://github.com/topaz-project/Topaz)**  
-
-  **The comprehensive Azure emulator.** Covers control and data plane APIs, with **local ARM and Bicep template deployments**, Azure RBAC, and **Microsoft Entra ID tenant emulation** . Best for teams that need to test Azure infrastructure-as-code locally, not just storage.
-
-
-
-### Google Cloud Emulation
-
-
-
-- **[floci-gcp](https://github.com/floci-io/floci-gcp)**  
-
-  **The free GCP local emulator.** No account, no auth token, no feature gates . **Single port** (4588) for all services via HTTP/2 ALPN negotiation—no per-service daemon setup . **Supported services**: Cloud Storage, Pub/Sub, Firestore, Datastore, Secret Manager, IAM, and Managed Kafka . **Persistence modes**: memory (default, fast), persistent (durable), hybrid (5s async flush), WAL (highest durability) . Best for GCP teams that want a free, LocalStack-style emulator with broad service coverage.
-
-
-
-- **[localgcp](https://github.com/slokam-ai/localgcp)**  
-
-  **The Vertex AI-aware GCP emulator.** One Go binary covering 14 services including **Vertex AI** (Gemini API with local model backends via Ollama, OpenAI, or Anthropic), BigQuery, Spanner, Firestore, Pub/Sub, Cloud Storage, Bigtable, Cloud SQL, Memorystore, Cloud Tasks, KMS, Secret Manager, Cloud Run, and Cloud Logging . **Key differentiator**: Vertex AI emulation with `generateContent`, streaming, tool/function calling, and embeddings—backed by local models instead of stubs . Best for teams building GCP AI applications that need to test Vertex AI integration locally.
-
-
-
-- **Firebase Local Emulator Suite** — Google-provided suite for local testing across Firebase services including Authentication, Firestore, Realtime Database, and Cloud Functions . Best for Firebase-centric applications.
-
-
-
-### Multi-Cloud Emulation
-
-
-
-- **[cloudemu](https://github.com/stackshy/cloudemu)**  
-
-  **The multi-cloud in-memory emulator.** Emulates AWS, Azure, and GCP APIs entirely in memory—any language, $0, deterministic, resettable . **Three ways to run**: standalone server/Docker (ports 4566/4568/4569 for AWS/Azure/GCP), in-process Go `httptest.NewServer`, or typed Go API directly . **Coverage**: storage (S3/Blob/GCS), compute (EC2/VM/Compute Engine), NoSQL (DynamoDB/Cosmos/Firestore), relational (RDS/SQL/Cloud SQL), Kubernetes control planes (EKS/AKS/GKE), serverless, messaging, and more . **Kubernetes**: hands back a real kubeconfig for `kubectl` round-trips . **Reset**: `curl -X POST http://127.0.0.1:4566/_cloudemu/reset` for clean test state . **Limitation**: emulates the API layer, not real backend execution—it's a control-surface mock . Best for multi-cloud applications that need one local endpoint for all three providers.
-
-
-
-### Additional Strong Open-Source Options
-
-
-
-- **S3Mock** — Community implementation of a subset of the Amazon S3 API for local integration testing, with Docker and Testcontainers support .
-
-- **ElasticMQ** — SQS-compatible message queue, usable standalone or embedded .
-
-- **BigQuery Emulator** — Go-based BigQuery API emulator for local query tests .
-
-- **Frameworks for building custom systems**: Use **floci** or **MiniStack** as the AWS backbone (migrate from LocalStack). Use **Azurite** or **azlocal** for Azure. Use **floci-gcp** or **localgcp** for GCP. Use **cloudemu** when you need one emulator across multiple clouds. Use **Moto** for Python-only unit tests.
-
-
-
-## How to Contribute
-
-
-
-1. Fork the repo.
-
-2. Add/edit entries in `README.md` (follow existing format).
-
-3. Include: name, link, 1–2 sentence description, and whether it's SaaS or open-source.
-
-4. Submit PR with a short explanation.
-
-
-
-Star the repo if you find it useful!
-
-
-
-## Disclaimer
-
-
-
-- This is a **community-curated** list — not exhaustive and not an endorsement.
-
-- **LocalStack is no longer freely usable for commercial work**: the Community Edition requires authentication and prohibits commercial use on the free tier. The open-source alternatives above exist specifically to fill this gap .
-
-- **Emulation fidelity varies**: in-process mocks (Moto) are fast but don't execute real code. Wire-protocol servers (floci, MiniStack, fakecloud) can run real Lambda/databases but are heavier. Choose based on whether your tests need API shapes or actual cross-service behavior .
-
-- **Security is not emulated**: floci explicitly does not enforce IAM policies by default—it mimics AWS behavior, not AWS security. Enable `FLOCI_SERVICES_IAM_ENFORCEMENT_ENABLED` if you need policy validation .
-
-- **Data persistence defaults vary**: floci stores in memory by default (lost on shutdown); MiniStack persists; Azurite has configurable persistence. Configure volumes for state you want to keep across restarts.
-
-
+</div>
 
 ---
 
+## 📑 Table of Contents
 
+- [⚡ Overview](#-overview)
+- [📊 Sector Overview & Market Dynamics](#-sector-overview--market-dynamics)
+- [🏢 SaaS & Commercial Platforms](#-saas--commercial-platforms)
+- [🚀 Open-Source GitHub Projects](#-open-source-github-projects)
+  - [☁️ AWS Emulators](#️-aws-emulators)
+  - [🔷 Azure Emulators](#-azure-emulators)
+  - [🌐 Google Cloud (GCP) Emulators](#-google-cloud-gcp-emulators)
+  - [🔀 Multi-Cloud & Specialized Emulators](#-multi-cloud--specialized-emulators)
+- [🛠️ Key Frameworks & Migration Guide](#️-key-frameworks--migration-guide)
+- [📈 Star History](#-star-history)
+- [🤝 How to Contribute](#-how-to-contribute)
+- [💖 Support & Sponsorship](#-support--sponsorship)
+- [⚖️ Disclaimer](#️-disclaimer)
 
-**Made for cloud developers, DevOps engineers, and teams building offline-first cloud workflows.**  
+---
 
-Let's make local cloud emulation more open, faithful, and appropriately scoped.
+## ⚡ Overview
+
+Developing and testing against public cloud providers (Amazon Web Services, Microsoft Azure, Google Cloud Platform) introduces latency, cloud API egress costs, network dependencies, and flaky CI/CD execution. **Local Cloud Emulators** simulate cloud provider APIs on your local workstation or CI runner—letting you build, test, and validate Infrastructure-as-Code (Terraform, Bicep, Pulumi) and serverless applications without requiring actual cloud accounts, internet connectivity, or unexpected cloud bills.
+
+Following licensing shifts in early 2026—when LocalStack transitioned its Community Edition to a proprietary authentication model—the developer tooling community has expanded with an array of MIT/Apache/AGPL open-source drop-in emulators.
+
+---
+
+## 📊 Sector Overview & Market Dynamics
+
+The **local cloud emulation and self-hosted cloud sandboxing** sector sits at the convergence of the **$18+ Billion Self-Hosted Cloud Platforms** market and the broader **$700+ Billion Cloud Computing & DevOps Testing** ecosystem, growing at a rapid double-digit CAGR (>11%). 
+
+Market dynamics have historically exhibited a **winner-take-most concentration** around developer mindshare (anchored predominantly by LocalStack for AWS emulation and Moto for Python testing); however, the category has recently entered a **moderately fragmented phase**. Strict enterprise compliance constraints, developer pushback against proprietary licensing, and cost-reduction drives have stimulated depth-first, single-binary, and multi-tenant open-source alternatives across AWS, Azure, and GCP.
+
+---
+
+## 🏢 SaaS & Commercial Platforms
+
+| Product | Valuation / Revenue | Starting Price | Free Tier / Trial Limits | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **[LocalStack](https://localstack.cloud/)** | **Valuation:** ~$100M–$250M (Series A, $25M raised)<br>**Revenue:** ~$7M–$10M ARR | Starts at **$39/dev/month** (Base plan); $89/dev/month (Ultimate plan) | **Hobby Plan**: $0 forever (Strictly non-commercial use only, community tier service limits, requires auth token).<br>**Free Trial**: 30-day free trial of Ultimate tier (no credit card required). | Emulates AWS locally in Docker. Features base AWS emulation, Cloud Pods state sharing, ephemeral sandboxes, and Azure in private preview. Commercial use on the free Hobby tier is prohibited; requires an account & auth token. |
+
+*Note: No other dedicated pure-SaaS platforms exist exclusively for local cloud emulation, as the primary value proposition of these tools is local containerized or in-process execution. Paid tiers for local emulation tools represent commercial usage licenses, advanced hosted management, and state-sharing features.*
+
+---
+
+## 🚀 Open-Source GitHub Projects
+
+All open-source tools below are actively maintained and sorted in descending order of GitHub community stars within their respective categories.
+
+### ☁️ AWS Emulators
+
+* **[LocalStack](https://github.com/localstack/localstack)** [![Stars](https://img.shields.io/github/stars/localstack/localstack?style=social&color=white)](https://github.com/localstack/localstack/stargazers)  
+  **The former de facto standard, now proprietary.** Provides a fully functional local AWS cloud stack as a Docker container. Since March 2026, the Community Edition requires authentication (account + auth token), and commercial use on the free Hobby plan is prohibited. Paid plans unlock commercial use.
+
+* **[floci](https://github.com/floci-io/floci)** [![Stars](https://img.shields.io/github/stars/floci-io/floci?style=social&color=white)](https://github.com/floci-io/floci/stargazers)  
+  **The MIT-licensed LocalStack drop-in replacement.** A single static binary speaking the AWS wire protocol on port 4566. Requires no account or auth token. Automatically translates LocalStack environment variables, executes `/etc/localstack/init/` scripts, and responds on `/_localstack/health`. Employs real backend containers for Lambda, RDS (PostgreSQL/MySQL), and Valkey/ElastiCache.
+
+* **[Moto](https://github.com/getmoto/moto)** [![Stars](https://img.shields.io/github/stars/getmoto/moto?style=social&color=white)](https://github.com/getmoto/moto/stargazers)  
+  **The mature Python AWS mock.** The longest-standing open-source AWS emulator. Functions both in-process (patching botocore with zero infrastructure footprint) and as a standalone HTTP server speaking wire protocol for any programming language.
+
+* **[MiniStack](https://github.com/ministackorg/ministack)** [![Stars](https://img.shields.io/github/stars/ministackorg/ministack?style=social&color=white)](https://github.com/ministackorg/ministack/stargazers)  
+  **The multi-tenant AWS emulator.** Maps any 12-digit `AWS_ACCESS_KEY_ID` to an isolated account ID with multi-region state separation. Eases migration with LocalStack health-check compatibility, init script execution, and reset endpoints for clean CI state.
+
+* **[fakecloud](https://github.com/faiscadev/fakecloud)** [![Stars](https://img.shields.io/github/stars/faiscadev/fakecloud?style=social&color=white)](https://github.com/faiscadev/fakecloud/stargazers)  
+  **The depth-first Rust AWS emulator.** Single ~19 MB static binary (AGPL-3.0) validated against 54,000+ Smithy test variants. Supports 23 services and 1,680 operations including S3, SQS, SNS, DynamoDB, Lambda (13 runtimes), CloudFormation, EventBridge, Step Functions, and Bedrock with real cross-service triggering.
+
+---
+
+### 🔷 Azure Emulators
+
+* **[Azurite](https://github.com/Azure/Azurite)** [![Stars](https://img.shields.io/github/stars/Azure/Azurite?style=social&color=white)](https://github.com/Azure/Azurite/stargazers)  
+  **Microsoft's official Azure Storage emulator.** Open-source (JavaScript/Node.js) cross-platform emulator supporting Azure Blob, Queue, and Table storage APIs with IP-style and production-style URL schemes.
+
+* **[floci-az](https://github.com/floci-io/floci-az)** [![Stars](https://img.shields.io/github/stars/floci-io/floci-az?style=social&color=white)](https://github.com/floci-io/floci-az/stargazers)  
+  **Free, lightweight local Azure emulator suite.** Part of the Floci project family, providing local API endpoints for core Azure compute, messaging, and cloud resource primitives without telemetry or authentication hurdles.
+
+* **[localaz](https://github.com/link-society/localaz)** [![Stars](https://img.shields.io/github/stars/link-society/localaz?style=social&color=white)](https://github.com/link-society/localaz/stargazers)  
+  **Lightweight local Azure cloud emulator.** Inspired by LocalStack and localgcp, providing developer-friendly local stubs and mocks for essential Azure cloud service interactions.
+
+* **[azlocal](https://github.com/DanielTangnes/azlocal)** [![Stars](https://img.shields.io/github/stars/DanielTangnes/azlocal?style=social&color=white)](https://github.com/DanielTangnes/azlocal/stargazers)  
+  **Unified Azure local developer suite.** Orchestrates Azurite, Cosmos DB Linux emulator, and Service Bus emulator with Key Vault and Event Grid mocks under a single CLI (`azlocal up -d`) and local web management dashboard.
+
+---
+
+### 🌐 Google Cloud (GCP) Emulators
+
+* **[floci-gcp](https://github.com/floci-io/floci-gcp)** [![Stars](https://img.shields.io/github/stars/floci-io/floci-gcp?style=social&color=white)](https://github.com/floci-io/floci-gcp/stargazers)  
+  **The open-source GCP local emulator.** Free and unencumbered single-port (4588) emulator utilizing HTTP/2 ALPN negotiation. Supports Cloud Storage, Pub/Sub, Firestore, Datastore, Secret Manager, IAM, and Managed Kafka with in-memory or WAL-backed persistence.
+
+* **[localgcp](https://github.com/slokam-ai/localgcp)** [![Stars](https://img.shields.io/github/stars/slokam-ai/localgcp?style=social&color=white)](https://github.com/slokam-ai/localgcp/stargazers)  
+  **The Vertex AI-aware GCP emulator.** Single Go binary covering 14 GCP services with unique native emulation for Vertex AI (Gemini API with streaming and tool calling) backed by local Ollama, OpenAI, or Anthropic models.
+
+* **Firebase Local Emulator Suite**  
+  **Google's official local development suite.** Emulates Firebase Authentication, Cloud Firestore, Realtime Database, Cloud Storage, and Cloud Functions with an interactive browser-based UI.
+
+---
+
+### 🔀 Multi-Cloud & Specialized Emulators
+
+* **[softwaremill/elasticmq](https://github.com/softwaremill/elasticmq)** [![Stars](https://img.shields.io/github/stars/softwaremill/elasticmq?style=social&color=white)](https://github.com/softwaremill/elasticmq/stargazers)  
+  **Amazon SQS-compatible message queue.** High-performance Scala/Akka-based messaging system with an SQS-compatible REST interface, runnable standalone, in Docker, or embedded in unit test runners.
+
+* **[adobe/S3Mock](https://github.com/adobe/S3Mock)** [![Stars](https://img.shields.io/github/stars/adobe/S3Mock?style=social&color=white)](https://github.com/adobe/S3Mock/stargazers)  
+  **Adobe's lightweight Amazon S3 emulator.** Implements the S3 HTTP REST API for local unit and integration testing. Seamlessly packaged for Docker, Testcontainers, JUnit Jupiter, and TestNG.
+
+* **[goccy/bigquery-emulator](https://github.com/goccy/bigquery-emulator)** [![Stars](https://img.shields.io/github/stars/goccy/bigquery-emulator?style=social&color=white)](https://github.com/goccy/bigquery-emulator/stargazers)  
+  **Google Cloud BigQuery emulator in Go.** Standalone BigQuery API implementation allowing complex SQL validation and query execution locally without GCP credentials or billing.
+
+* **[stackshy/cloudemu](https://github.com/stackshy/cloudemu)** [![Stars](https://img.shields.io/github/stars/stackshy/cloudemu?style=social&color=white)](https://github.com/stackshy/cloudemu/stargazers)  
+  **Multi-cloud in-memory control surface simulator.** Emulates AWS, Azure, and GCP APIs (S3/Blob/GCS, EC2/VM, DynamoDB/Cosmos/Firestore, EKS/AKS/GKE) in Go memory with deterministic instant resets via `/_cloudemu/reset`.
+
+* **[nrndev/pogi](https://github.com/nrndev/pogi)** [![Stars](https://img.shields.io/github/stars/nrndev/pogi?style=social&color=white)](https://github.com/nrndev/pogi/stargazers)  
+  **All-in-one multi-cloud local emulator.** Single binary listening on one local port to simulate core AWS, Azure, and GCP services simultaneously for local CLI, SDK, and Terraform testing.
+
+---
+
+## 🛠️ Key Frameworks & Migration Guide
+
+- **Migrating from LocalStack**: Consider **floci** or **MiniStack** for wire-level AWS drop-in compatibility without license keys or authentication requirements.
+- **Python-First Testing**: Use **Moto** for zero-dependency, ultra-fast in-process botocore mocks.
+- **Azure Testing Stacks**: Pair Microsoft's official **Azurite** with **floci-az** or **azlocal** for multi-service coverage.
+- **GCP & AI Development**: Deploy **floci-gcp** for standard GCP services, and **localgcp** when testing applications with local LLMs / Vertex AI.
+- **Cross-Cloud Unified CI**: Deploy **cloudemu** or **pogi** for lightning-fast unit tests requiring multi-cloud API control surfaces.
+
+---
+
+## 📈 Star History
+
+[![Star History Chart](https://star-history.dera.page/svg?repos=ishandutta2007/Awesome-Local-Cloud-Emulation&type=date&legend=top-left)](https://star-history.dera.page/#ishandutta2007/Awesome-Local-Cloud-Emulation&type=date&legend=top-left)
+
+---
+
+## 🤝 How to Contribute
+
+Contributions, bug reports, and updates are warmly welcomed! 🌟
+
+1. 🍴 Fork the repository.
+2. 🌿 Create a new feature branch (`git checkout -b feature/add-new-emulator`).
+3. 📝 Add or update tools following the existing format with stars badge, factual descriptions, and official links.
+4. 🚀 Commit your changes (`git commit -m 'Add new cloud emulator tool'`).
+5. 📬 Push to the branch and open a Pull Request.
+
+---
+
+## 💖 Support & Sponsorship
+
+If this curated list helps you reduce cloud bills, streamline local testing, or accelerate development, please consider showing your support:
+
+- ⭐ **Star this repository** to help other developers discover it!
+- 🍴 **Fork and share** it with your engineering team or community.
+- ☕ **Buy me a coffee / Sponsor the project** on the [GitHub Sponsor Dashboard](https://github.com/sponsors/ishandutta2007)! Every sponsorship fuels continuous maintenance and curation.
+
+---
+
+## ⚖️ Disclaimer
+
+- This is an independent, community-curated directory — not affiliated with or endorsed by Amazon Web Services, Microsoft Azure, Google Cloud, or LocalStack Inc.
+- Emulation fidelity varies: in-process mocks (e.g. Moto) mock API interfaces and schemas, whereas containerized wire-protocol servers (e.g. floci, MiniStack, fakecloud) execute actual backend processes (Postgres, Redis, Lambda runtimes).
+- Security policies (IAM) and persistent state mechanisms differ across emulators; refer to individual project documentations before relying on them for compliance validation.
