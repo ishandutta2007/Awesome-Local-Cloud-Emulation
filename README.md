@@ -1,0 +1,2 @@
+# Awesome-Local-Cloud-Emulation
+
